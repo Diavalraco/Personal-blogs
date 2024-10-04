@@ -72,41 +72,37 @@ const initThreeJs = () => {
   const renderer = new THREE.WebGLRenderer({ alpha: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   threeJsRef.current.appendChild(renderer.domElement);
-
-  // Create the cube geometry with 8 points (corners)
   const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
-  const cubeMaterial = new THREE.LineBasicMaterial({ color: isDarkMode ? 0x4d94ff : 0x0f52ba });
+  const cubeMaterial = new THREE.LineBasicMaterial({
+    color: isDarkMode ? 0x4d94ff : 0x0f52ba,
+  });
 
-  // Create lines between the cube's vertices (wireframe effect)
   const edges = new THREE.EdgesGeometry(cubeGeometry);
   const cubeLines = new THREE.LineSegments(edges, cubeMaterial);
   scene.add(cubeLines);
 
   camera.position.z = 30;
 
-  // Store original positions of the vertices for the wave effect
-  const originalVertices = cubeGeometry.vertices.map(v => v.clone());
-
-  // Animate the cube with a wave effect on its points
+  const originalVertices = cubeGeometry.vertices.map((v) => v.clone());
   const animate = () => {
     requestAnimationFrame(animate);
-
-    // Apply a waving effect to each vertex
     cubeGeometry.vertices.forEach((vertex, i) => {
       const originalVertex = originalVertices[i];
       const time = Date.now() * 0.001;
       const waveAmplitude = 0.5;
       const waveFrequency = 2;
-      
-      // Adjust the y-position based on a sine wave
-      vertex.y = originalVertex.y + Math.sin(time * waveFrequency + originalVertex.x) * waveAmplitude;
-      vertex.x = originalVertex.x + Math.sin(time * waveFrequency + originalVertex.y) * waveAmplitude;
+
+      vertex.y =
+        originalVertex.y +
+        Math.sin(time * waveFrequency + originalVertex.x) * waveAmplitude;
+      vertex.x =
+        originalVertex.x +
+        Math.sin(time * waveFrequency + originalVertex.y) * waveAmplitude;
     });
 
     cubeGeometry.verticesNeedUpdate = true;
     cubeLines.geometry.verticesNeedUpdate = true;
 
-    // Optionally rotate the entire cube for extra effect
     cubeLines.rotation.x += 0.01;
     cubeLines.rotation.y += 0.01;
 
@@ -230,6 +226,7 @@ const Header = () => {
       </AnimatePresence>
       <motion.h1
         className="animated-title"
+        style={{ color: isDarkMode ? "#b0c4de" : "#0f52ba" }}
         initial={{ y: -50, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.8, type: "spring" }}
@@ -249,6 +246,7 @@ const Header = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: index * 0.1 }}
+              style={{ color: isDarkMode ? "#ffffff" : "#333333" }}
             >
               {letter}
             </motion.span>
@@ -262,6 +260,7 @@ const Header = () => {
           "
         </motion.span>
       </motion.h1>
+
       <motion.h2
         className="animated-subtitle"
         initial={{ y: 50, opacity: 0 }}
@@ -309,9 +308,30 @@ const styles = `
 
 .home-header h1 {
   font-size: 3rem;
-  color: #0f52ba;
+  color: var(--primary-color);
   margin-bottom: 1rem;
 }
+
+.dark-mode h1 {
+  --primary-color: #b0c4de; /* Light color for dark mode */
+}
+
+.light-mode h1 {
+  --primary-color: #0f52ba; /* Dark color for light mode */
+}
+
+.letter-animation span {
+  color: var(--text-color);
+}
+
+.dark-mode .letter-animation span {
+  --text-color: #ffffff; /* Bright text color for dark mode */
+}
+
+.light-mode .letter-animation span {
+  --text-color: #333333; /* Dark text color for light mode */
+}
+
 
 .home-header h1 span {
   color: #b0c4de;

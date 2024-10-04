@@ -3,7 +3,7 @@ import './styles.css';
 
 const SearchBar = ({ formSubmit, value, handleSearchKey, clearSearch }) => {
   const [showOptions, setShowOptions] = useState(false);
-  const options = ['Blog', 'Story', 'Poems', 'Thoughts'];
+  const options = ['Blogs', 'Stories', 'Poems', 'Thoughts'];
   const wrapperRef = useRef(null);
 
   const handleOptionClick = (option) => {
