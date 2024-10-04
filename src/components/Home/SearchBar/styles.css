@@ -1,0 +1,86 @@
+.searchBar-wrap {
+  background-color: #f0f0f0;
+  width: fit-content;
+  margin: 2.5rem auto 4rem auto;
+  padding: 0.5rem;
+  border-radius: 5px;
+  position: relative;
+}
+
+.searchBar-wrap form {
+  display: flex;
+  align-items: center;
+}
+
+.searchBar-wrap input {
+  background-color: #f0f0f0;
+  outline: none;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 5px;
+  width: 200px;
+}
+
+.searchBar-wrap span {
+  padding-right: 0.5rem;
+  cursor: pointer;
+}
+
+.searchBar-wrap button {
+  outline: none;
+  border: none;
+  padding: 0.3rem 1rem;
+  border-radius: 5px;
+  background-color: #0f52ba;
+  color: #fff;
+}
+
+:root {
+  --background-color-light: #ffffff;
+  --background-color-dark: #1c1c1c;
+  --text-color-light: #000000;
+  --text-color-dark: #ffffff;
+  --option-background-light: #f0f0f0;
+  --option-background-dark: #333333;
+  --option-hover-background-light: #e0e0e0;
+  --option-hover-background-dark: #444444;
+}
+
+body.light-mode {
+  background-color: var(--background-color-light);
+  color: var(--text-color-light);
+}
+
+body.dark-mode {
+  background-color: var(--background-color-dark);
+  color: var(--text-color-dark);
+}
+
+.options {
+  position: absolute;
+  z-index: 10;
+  border: 2px solid #ccc;
+  width: 250px;
+  background-color: var(--option-background-light);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 170px;
+  overflow: hidden;
+  top: calc(78% + 10px);
+}
+
+.option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+body.dark-mode .option {
+  background-color: var(--option-background-dark);
+}
+
+.option:hover {
+  background-color: var(--option-hover-background-light);
+}
+
+body.dark-mode .option:hover {
+  background-color: var(--option-hover-background-dark);
+}
