@@ -2,59 +2,62 @@ import React, { useState, useEffect, useRef } from 'react';
 import './styles.css';
 
 const SearchBar = ({ formSubmit, value, handleSearchKey, clearSearch }) => {
-  const [showOptions, setShowOptions] = useState(false); // State to control dropdown visibility
+  const [showOptions, setShowOptions] = useState(false);
   const options = ['Blog', 'Story', 'Poems', 'Thoughts'];
-  const wrapperRef = useRef(null); // Ref for the wrapper to detect clicks outside
+  const wrapperRef = useRef(null);
 
   const handleOptionClick = (option) => {
-    handleSearchKey({ target: { value: option } }); // Set the input value to the selected option
-    setShowOptions(false); // Hide options after selection
+    handleSearchKey({ target: { value: option } });
+    setShowOptions(false);
   };
 
   const handleInputFocus = () => {
-    setShowOptions((prev) => !prev); // Toggle dropdown visibility on input focus
+    setShowOptions(true); 
   };
 
   const handleClickOutside = (event) => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
-      setShowOptions(false); // Close options if clicked outside
+      setShowOptions(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside); // Add event listener on mount
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside); // Clean up on unmount
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
   return (
-    <div className='searchBar-wrap' ref={wrapperRef}>
-      <form onSubmit={formSubmit}>
+    <div className="searchBar-wrap" ref={wrapperRef}>
+      <form onSubmit={formSubmit} className="search-form">
         <input
-          type='text'
-          placeholder='Search By Category'
+          type="text"
+          placeholder="Search By Category"
           value={value}
-          onFocus={handleInputFocus} // Toggle options on focus
+          onFocus={handleInputFocus}
           onChange={handleSearchKey}
+          className="search-input"
         />
         {value && (
           <span 
             onClick={clearSearch} 
-            style={{ color: 'darkgrey' }} // Set the color to dark grey
+            className="clear-btn"
+            role="button" 
+            aria-label="Clear search"
           >
-            X
+            &times;
           </span>
         )}
-        <button type="submit">Go</button>
+        <button type="submit" className="submit-btn">Go</button>
       </form>
       {showOptions && (
-        <div className='options'>
+        <div className="options animated-dropdown">
           {options.map((option) => (
             <div 
               key={option} 
-              className='option' 
-              onClick={() => handleOptionClick(option)} // Handle option click
+              className="option" 
+              onClick={() => handleOptionClick(option)}
             >
               {option}
             </div>

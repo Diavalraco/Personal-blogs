@@ -61,6 +61,66 @@ const ParticleField = ({ isDarkMode }) => {
 
   return <canvas ref={canvasRef} className="particle-field" />;
 };
+const initThreeJs = () => {
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  const renderer = new THREE.WebGLRenderer({ alpha: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  threeJsRef.current.appendChild(renderer.domElement);
+
+  // Create the cube geometry with 8 points (corners)
+  const cubeGeometry = new THREE.BoxGeometry(10, 10, 10);
+  const cubeMaterial = new THREE.LineBasicMaterial({ color: isDarkMode ? 0x4d94ff : 0x0f52ba });
+
+  // Create lines between the cube's vertices (wireframe effect)
+  const edges = new THREE.EdgesGeometry(cubeGeometry);
+  const cubeLines = new THREE.LineSegments(edges, cubeMaterial);
+  scene.add(cubeLines);
+
+  camera.position.z = 30;
+
+  // Store original positions of the vertices for the wave effect
+  const originalVertices = cubeGeometry.vertices.map(v => v.clone());
+
+  // Animate the cube with a wave effect on its points
+  const animate = () => {
+    requestAnimationFrame(animate);
+
+    // Apply a waving effect to each vertex
+    cubeGeometry.vertices.forEach((vertex, i) => {
+      const originalVertex = originalVertices[i];
+      const time = Date.now() * 0.001;
+      const waveAmplitude = 0.5;
+      const waveFrequency = 2;
+      
+      // Adjust the y-position based on a sine wave
+      vertex.y = originalVertex.y + Math.sin(time * waveFrequency + originalVertex.x) * waveAmplitude;
+      vertex.x = originalVertex.x + Math.sin(time * waveFrequency + originalVertex.y) * waveAmplitude;
+    });
+
+    cubeGeometry.verticesNeedUpdate = true;
+    cubeLines.geometry.verticesNeedUpdate = true;
+
+    // Optionally rotate the entire cube for extra effect
+    cubeLines.rotation.x += 0.01;
+    cubeLines.rotation.y += 0.01;
+
+    renderer.render(scene, camera);
+  };
+
+  animate();
+
+  return () => {
+    renderer.dispose();
+    cubeGeometry.dispose();
+    cubeMaterial.dispose();
+  };
+};
 
 const Header = () => {
   const [isDarkMode, setIsDarkMode] = useState(true);
