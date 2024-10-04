@@ -268,7 +268,7 @@ const Header = () => {
         transition={{ delay: 0.5, duration: 0.8, type: "spring" }}
         onHoverStart={animateSubtitle}
       >
-        An inspiring space for stories, blogs, thoughts, and poems.
+        An Inspiring Space For Stories, Blogs, Thoughts And Poems
       </motion.h2>
     </motion.header>
   );
